@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: kube-logging
+  name: kibana
+  labels:
+    app: kibana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      containers:
+        - name: kibana
+          image: docker.elastic.co/kibana/kibana:7.9.3
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+            requests:
+              cpu: 700m
+              memory: 1Gi
+          env:
+            - name: ELASTICSEARCH_HOSTS
+              value: "http://elasticsearch-svc.kube-logging.svc.cluster.local:9200"
+
+          ports:
+            - containerPort: 5601
+          volumeMounts:
+          - name: config
+            mountPath: /usr/share/kibana/config/kibana.yml
+            readOnly: true
+            subPath: kibana.yml
+      volumes:
+        - name: config
+          configMap:
+            name: kibana-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: kube-logging
+  name: kibana-svc
+  labels:
+    app: kibana
+spec:
+  type: NodePort
+  # type: LoadBalancer
+  ports:
+    # - port: 80
+    - port: 80
+      targetPort: 5601
+      protocol: TCP
+  selector:
+    app: kibana

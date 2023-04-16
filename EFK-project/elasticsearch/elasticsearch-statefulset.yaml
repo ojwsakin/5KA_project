@@ -1,0 +1,121 @@
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: kube-logging
+  name: elasticsearch-svc
+  labels:
+    app: elasticsearch
+spec:
+  clusterIP: None
+  ports:
+    - name: rest
+      port: 9200
+    - name: nodecom
+      port: 9300
+  selector:
+    app: elasticsearch
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: kube-logging
+  name: elasticsearch-svc-nodeport
+  labels:
+    app: elasticsearch
+spec:
+  type: NodePort
+  ports:
+    - nodePort: 30921
+      port: 9200
+      targetPort: 9200
+      protocol: TCP
+  selector:
+    app: elasticsearch
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: kube-logging
+  name: elasticsearch-node
+  labels:
+    app: elasticsearch
+spec:
+  serviceName: elasticsearch-svc
+  replicas: 3
+  selector:
+    matchLabels:
+      app: elasticsearch
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+    spec:
+      containers:
+        - name: elasticsearch
+          # image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.9.3 - 오픈소스버전(xpack사용 불가)
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+            requests:
+              cpu: 500m
+              memory: 1Gi
+          ports:
+            - containerPort: 9200
+              name: rest
+              protocol: TCP
+            - containerPort: 9300
+              name: inter-node
+              protocol: TCP
+          env:
+            - name: cluster.name
+              value: elasticsearch-cluster
+            - name: node.name
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: discovery.seed_hosts
+              value: "elasticsearch-svc"
+            - name: cluster.initial_master_nodes
+              value: "elasticsearch-node-0"
+            - name: ES_JAVA_OPTS
+              # value: "-Xms1024m -Xmx1024m"
+              value: "-Xms512m -Xmx512m"
+            ## 추가
+            - name: xpack.security.enabled
+              value: "true"
+            - name: xpack.security.http.ssl.enabled
+              value: "false"
+      initContainers:
+        - name: fix-permissions
+          image: busybox:1.32.0-musl
+          imagePullPolicy: IfNotPresent
+          command: ["sh", "-c", "chown -R 1000:1000 /usr/share/elasticsearch/data"]
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: data
+              mountPath: /usr/share/elasticsearch/data
+        - name: increase-vm-max-map
+          image: busybox:1.32.0-musl
+          imagePullPolicy: IfNotPresent
+          command: ["sysctl", "-w", "vm.max_map_count=262144"]
+          securityContext:
+            privileged: true
+        - name: increase-fd-ulimit
+          image: busybox:1.32.0-musl
+          imagePullPolicy: IfNotPresent
+          command: ["sh", "-c", "ulimit -n 65536"]
+          securityContext:
+            privileged: true
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        storageClassName: gp2-csi # 내가 선언한 storageclass를 사용
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 10Gi
