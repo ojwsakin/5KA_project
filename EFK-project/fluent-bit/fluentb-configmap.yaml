@@ -69,7 +69,7 @@ data:
         Replace_Dots    On
         Retry_Limit     False
         http_user       elastic
-        http_Passwd     test123
+        # http_Passwd     ###### elasticsearch의 pw를 적어줍니다
         tls             Off
         tls.verify      Off
   # 로그 데이터 파싱 방법
