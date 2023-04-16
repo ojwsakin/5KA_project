@@ -62,7 +62,7 @@
 
 ## 로그 모니터링 전략
 
-![image](https://user-images.githubusercontent.com/93701762/232328953-fe51c510-4bdb-4d19-a005-a0933e65c893.png)
+![image](https://user-images.githubusercontent.com/93701762/232328982-776ce2f7-2320-41b2-9bc8-a57c830aec12.png)
 
 - 로그 모니터링을 중앙에서 관리, 확인할 수 있도록 구축했습니다
 - 분산되어 있는 로그 데이터를 한 곳에서 관리하고, 중요한 이벤트나 에러 등을 빠르게 감지하여 대응할 수 있습니다.
