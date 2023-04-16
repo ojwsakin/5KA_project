@@ -51,7 +51,7 @@
 
 ## CI/CD pipeline 전략
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/569aa992-fe70-441d-a312-a5909bd5ea2f/Untitled.png)
+![image](https://user-images.githubusercontent.com/93701762/232328943-7a2c340a-01de-4ecb-b59e-77633887b07f.png)
 
 - 배포와 운영에 관련된 요소를 코드화하여 확장성, 안정성을 보장하는 GitOps기반 CI/CD pipeline을 구축했습니다
 - 어플리케이션 소스 코드와 Deployment 코드의 저장소를 분리 하여 관리 했습니다
@@ -62,7 +62,7 @@
 
 ## 로그 모니터링 전략
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/cc3b0fa6-9e9b-4a93-994f-65367181a397/Untitled.png)
+![image](https://user-images.githubusercontent.com/93701762/232328953-fe51c510-4bdb-4d19-a005-a0933e65c893.png)
 
 - 로그 모니터링을 중앙에서 관리, 확인할 수 있도록 구축했습니다
 - 분산되어 있는 로그 데이터를 한 곳에서 관리하고, 중요한 이벤트나 에러 등을 빠르게 감지하여 대응할 수 있습니다.
