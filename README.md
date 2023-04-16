@@ -36,7 +36,7 @@
 
 ## Service Architecture
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7b1136d4-67cf-4a96-bc20-8823ccea0ee9/Untitled.png)
+![image](https://user-images.githubusercontent.com/93701762/232328894-ad3be0f4-97c3-41e6-a095-67f424ee3c65.png)
 
 - 개발자가 웹엡에 접속해서 회원가입을 합니다
     - 이 때 팀(Dev, Ops)에 맞게 회원가입을 합니다
