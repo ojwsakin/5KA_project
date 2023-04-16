@@ -12,4 +12,4 @@ data:
       hosts: ${ELASTICSEARCH_HOSTS}
     ## elasticsearch user 추가
     elasticsearch.username: elastic
-    elasticsearch.password: test123
+    ## elasticsearch.password: elasticsearch의 비밀번호를 적어줍니다
