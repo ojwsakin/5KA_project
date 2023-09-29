@@ -48,16 +48,6 @@
 - Docker image를 Nexus repository에 push합니다
 - ArgoCD가 개발자가 소속된 팀의 클러스터에 어플리케이션을 배포합니다
 
----
-
-## CI/CD pipeline 전략
-
-![image](https://user-images.githubusercontent.com/93701762/232328943-7a2c340a-01de-4ecb-b59e-77633887b07f.png)
-
-- 배포와 운영에 관련된 요소를 코드화하여 확장성, 안정성을 보장하는 GitOps기반 CI/CD pipeline을 구축했습니다
-- 어플리케이션 소스 코드와 Deployment 코드의 저장소를 분리 하여 관리 했습니다
-- Deployment 코드의 저장소 내의 manifest file은 Helm chart형식으로 작성하여 배포의 유연성과 수월한 버전 관리를 보장하도록 구성했습니다
-- Job 실행 속도와 환경의 보안과 같은 이유로 Docker image build와 push가 일어나는 환경을 pod로 구축하여 jenkins Master와 Agent 실행 환경을 격리 했습니다
 
 ---
 
